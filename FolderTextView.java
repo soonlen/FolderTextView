@@ -88,6 +88,9 @@ public class FolderTextView extends TextView {
             mIsFold = !mIsFold;
             mHasDrawn = false;
             invalidate();
+            if (folderTextViewInterface != null) {
+                folderTextViewInterface.folder(mIsFold);
+            }
         }
 
         @Override
@@ -95,6 +98,16 @@ public class FolderTextView extends TextView {
             ds.setColor(mTailColor);
         }
     };
+
+    public interface FolderTextViewInterface {
+        void folder(boolean mIsFold);
+    }
+
+    private FolderTextViewInterface folderTextViewInterface;
+
+    public void setFolderTextViewInterface(FolderTextViewInterface folderTextViewInterface) {
+        this.folderTextViewInterface = folderTextViewInterface;
+    }
 
     /**
      * 构造 
@@ -154,7 +167,18 @@ public class FolderTextView extends TextView {
 
         a.recycle();
     }
-    
+
+    /**
+     * 代码设置是否折叠
+     *
+     * @param folder
+     */
+    public void setFolder(boolean folder) {
+        mIsFold = folder;
+        mHasDrawn = false;
+        invalidate();
+    }
+
     @Override
     public void setText(CharSequence text, BufferType type) {
         if (TextUtils.isEmpty(mFullText) || !mIsInner) {
